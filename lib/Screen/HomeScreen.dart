@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Utils/AppColors.dart';
 import 'package:flutter_application_1/Widgets/TaskCard.dart';
 import 'package:flutter_application_1/Models/TaskModel.dart';
+import 'package:flutter_application_1/Screen/AddScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -46,6 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(8),
                     child: InkWell(
                       onTap: () {
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AddScreen()),
+  );
           // aksi saat diklik
                       },
                       borderRadius: BorderRadius.circular(8),
