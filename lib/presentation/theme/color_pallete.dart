@@ -10,4 +10,5 @@ class AppColors {
   static const Color Icon = Colors.white;
   static const Color SecondIcon = Color(0xFF9F9FED);
   static const Color SecondText = Color(0xFFD5D5D5);
+  static const Color title = Color(0xFF9F9FED);
 }

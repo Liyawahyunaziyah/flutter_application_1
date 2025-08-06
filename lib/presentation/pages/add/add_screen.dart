@@ -1,12 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Utils/AppColors.dart';
+import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
+import 'package:flutter_application_1/models/TaskModel.dart';
 
-class AddScreen extends StatelessWidget {
+class AddScreen extends StatefulWidget {
   @override
+  _AddScreenState createState() => _AddScreenState();
+}
+class _AddScreenState extends State<AddScreen> {
+
+  DateTime? _selectedDate;
+  final TextEditingController _dateController = TextEditingController();
+
+  TimeOfDay? _selectedTime;
+  final TextEditingController _timeController = TextEditingController();
+
+  final TextEditingController _planController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+        _dateController.text =
+            '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}';
+      });
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      initialEntryMode: TimePickerEntryMode.dial, // bisa diganti input
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        _selectedTime = pickedTime;
+        _timeController.text = pickedTime.format(context);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _timeController.dispose();
+    _planController.dispose();
+    super.dispose();
+
+     Widget build(BuildContext context) {
+    return Container();
+  }
+}
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Make Your Plans Now'),
+        title: Text('Make Your Plans Now', style: TextStyle(
+          color: AppColors.title,
+          fontFamily: 'Inter',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        )),
         backgroundColor: AppColors.card,
         foregroundColor: AppColors.Background, // Sesuaikan dengan tema
       ),
@@ -26,6 +93,7 @@ class AddScreen extends StatelessWidget {
     ),
   ),
   child: TextField(
+    controller: _planController,
     decoration: InputDecoration(
       hintText: 'Your Plan',
       hintStyle: TextStyle(
@@ -52,6 +120,9 @@ class AddScreen extends StatelessWidget {
     ),
   ),
   child: TextField(
+    controller: _dateController,
+  readOnly: true,
+  onTap: () => _selectDate(context),
     decoration: InputDecoration(
       hintText: 'Select Date',
       hintStyle: TextStyle(
@@ -63,6 +134,7 @@ class AddScreen extends StatelessWidget {
       prefixIcon: Icon(Icons.calendar_today, color: AppColors.SecondIcon, size: 24, ),
       border: OutlineInputBorder(borderSide: BorderSide.none), // Buang border bawaan
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      
     ),
   ),
 ),
@@ -78,8 +150,11 @@ SizedBox(height: 24),
     ),
   ),
   child: TextField(
+    controller: _timeController,
+    readOnly: true,
+    onTap: () => _selectTime(context),
     decoration: InputDecoration(
-      hintText: 'Your Plan',
+      hintText: 'Add Time',
       hintStyle: TextStyle(
         color: AppColors.SecondText,
         fontFamily: 'Inter',
@@ -100,7 +175,24 @@ SizedBox(height: 24),
   height: 48,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                if (_planController.text.isNotEmpty && _selectedDate != null && _selectedTime != null) {
+    final DateTime reminderDateTime = DateTime(
+  _selectedDate!.year,
+  _selectedDate!.month,
+  _selectedDate!.day,
+  _selectedTime!.hour,
+  _selectedTime!.minute,
+);
+final newTask = TaskModel(
+  title: _planController.text,
+  timeOrDate:
+      '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year} ${_selectedTime!.format(context)}',
+  status: 'Up Coming',
+  reminderTime: reminderDateTime, // ⬅️ Tambahkan ini
+);
+                Navigator.pop(context, newTask);
+              }else{
+              }
               },
               child: Text('Make Plans', style: TextStyle(color: AppColors.textPrimary,fontFamily:'Inter', fontSize:20, fontWeight: FontWeight.bold ),),
               style: ElevatedButton.styleFrom(

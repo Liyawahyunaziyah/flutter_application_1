@@ -1,31 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Utils/AppColors.dart';
-import 'package:flutter_application_1/Widgets/TaskCard.dart';
-import 'package:flutter_application_1/Models/TaskModel.dart';
-import 'package:flutter_application_1/Screen/AddScreen.dart';
+import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
+import 'package:flutter_application_1/presentation/widgets/task_card.dart';
+import 'package:flutter_application_1/models/TaskModel.dart';
+import 'package:flutter_application_1/presentation/pages/add/add_screen.dart';
+import 'package:flutter_application_1/presentation/pages/home/widgets/sidebar.dart';
+import 'package:flutter_application_1/services/notificationServices.dart' as notifServices;
+import'package:flutter_application_1/services/scheduleNotification.dart' as scheduleNotif;
+
+
 
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
-
 } 
+
 class _HomeScreenState extends State<HomeScreen> {
   String activeTab = 'all'; // untuk switch tab
+  String selectedMenu = 'Home';
 
   final List<TaskModel> allTasks = [
-  TaskModel(title: 'Gym', timeOrDate: '17:30', status: 'Now'),
-  TaskModel(title: 'Dinner', timeOrDate: '19:45', status: 'Now'),
-  TaskModel(title: 'Go To Library', timeOrDate: '12 August 2025', status: 'Up Coming'),
-  TaskModel(title: 'Meeting', timeOrDate: '15 August 2025', status: 'Up Coming'),
-  TaskModel(title: 'Go To Market', timeOrDate: '7 August 2025', status: 'Done'),
-  TaskModel(title: 'Go To Laundry', timeOrDate: '3 August 2025', status: 'Done'),
-  TaskModel(title: 'Meeting', timeOrDate: '20 July 2025', status: 'Done'),
-  TaskModel(title: 'Meet With Clients', timeOrDate: '17 July 2025', status: 'Done')
+  TaskModel(title: 'Gym', timeOrDate: '17:30', status: 'Now',reminderTime: null),
+  TaskModel(title: 'Dinner', timeOrDate: '19:45', status: 'Now',reminderTime: null),
+  TaskModel(title: 'Go To Library', timeOrDate: '12 August 2025', status: 'Up Coming',reminderTime: null),
+  TaskModel(title: 'Meeting', timeOrDate: '15 August 2025', status: 'Up Coming',reminderTime: null),
+  TaskModel(title: 'Go To Market', timeOrDate: '7 August 2025', status: 'Done',reminderTime: null),
+  TaskModel(title: 'Go To Laundry', timeOrDate: '3 August 2025', status: 'Done',reminderTime: null),
+  TaskModel(title: 'Meeting', timeOrDate: '20 July 2025', status: 'Done',reminderTime: null),
+  TaskModel(title: 'Meet With Clients', timeOrDate: '17 July 2025', status: 'Done',reminderTime: null)
 ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: sidebar(
+        selectedMenu: selectedMenu,
+  onMenuTap: (menu) {
+    setState(() {
+      selectedMenu = menu;
+  });
+  },
+      ),
       backgroundColor: AppColors.Background,
       body: Column(
         children: [
@@ -41,17 +55,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.menu, color: Colors.white, size: 24),
+                    Builder(
+                      builder: (context) => IconButton(
+                        icon:Icon(Icons.menu, color: Colors.white, size: 24),
+                        onPressed: (){
+                          Scaffold.of(context).openDrawer();
+                        },
+                      ), 
+                    ),
                     Material(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     child: InkWell(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: ()async{
+                        final newTask = await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddScreen()),
-  );
+                        MaterialPageRoute(builder: (context) => AddScreen()),);
           // aksi saat diklik
+          if (newTask != null && newTask is TaskModel) {
+            notifServices.NotificationService.scheduleNotification(
+    id: newTask.reminderTime!.millisecondsSinceEpoch.remainder(100000), // id unik
+    title: newTask.title,
+    body: "Reminder: ${newTask.title}",
+    scheduledDate: newTask.reminderTime!,
+  );
+    setState(() {
+      allTasks.add(newTask); // tambahkan ke list
+    });
+  }
                       },
                       borderRadius: BorderRadius.circular(8),
                       child: Container(
@@ -145,21 +176,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
+                   // 🔔 Tombol tes notifikasi
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      notifServices.NotificationService.showSimpleNotification(
+                        title: 'Reminder Aktif!',
+                        body: 'Ini notifikasi tes dari aplikasi kamu 🎉',
+                      );
+                    },
+                    child: Text('Tes Notifikasi 🔔'),
+                  ),
 
+                  // Daftar task
+                  SizedBox(height: 16),
                   // Placeholder konten
                   Expanded(
   child: ListView(
     children: (activeTab == 'all'
-        ? allTasks.where((task) => task.status != 'Done').toList()
-        : allTasks.where((task) => task.status == 'Done').toList())
-        .map((task) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: TaskCard(task: task, isDoneTab: activeTab == 'done'),
-            ))
-        .toList(),
+            ? allTasks.asMap().entries.where((entry) => entry.value.status != 'Done')
+            : allTasks.asMap().entries.where((entry) => entry.value.status == 'Done'))
+        .map((entry) {
+      int realIndex = entry.key;
+      TaskModel task = entry.value;
+
+      return TaskCard(
+        task: task,
+        isDoneTab: activeTab == 'done',
+        onDelete: () {
+          setState(() {
+            allTasks.removeAt(realIndex);
+          });
+        },
+      );
+    }).toList(),
   ),
 ),
-
                 ],
               ),
             ),

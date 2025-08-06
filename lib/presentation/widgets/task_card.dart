@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Utils/AppColors.dart';
-import '../Models/TaskModel.dart';
+import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
+import '../../models/TaskModel.dart';
 
 class TaskCard extends StatelessWidget {
   final TaskModel task;
   final bool isDoneTab;
+  final VoidCallback onDelete;
 
-  const TaskCard({required this.task, required this.isDoneTab});
+  const TaskCard({required this.task, required this.isDoneTab,required this.onDelete,});
 
   Color getStatusColor(String status) {
     switch (status.toLowerCase()) {
@@ -31,7 +32,7 @@ Widget build(BuildContext context) {
         // CARD utama sebagai latar belakang
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: AppColors.Background,
             borderRadius: BorderRadius.circular(12),
@@ -62,9 +63,12 @@ Widget build(BuildContext context) {
                 ],
               ),
               // Icon delete
-              Padding(
-                padding: const EdgeInsets.all(30.0),
+              GestureDetector(
+                onTap: onDelete,
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
                 child: const Icon(Icons.delete, color: Colors.white),
+                )
               ),
             ],
           ),
