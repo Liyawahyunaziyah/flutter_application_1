@@ -5,9 +5,6 @@ import 'package:flutter_application_1/models/TaskModel.dart';
 import 'package:flutter_application_1/presentation/pages/add/add_screen.dart';
 import 'package:flutter_application_1/presentation/pages/home/widgets/sidebar.dart';
 import 'package:flutter_application_1/services/notificationServices.dart' as notifServices;
-import'package:flutter_application_1/services/scheduleNotification.dart' as scheduleNotif;
-
-
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String activeTab = 'all'; // untuk switch tab
   String selectedMenu = 'Home';
+  String selectedLanguage = 'en'; // default bahasa Inggris
+
 
   final List<TaskModel> allTasks = [
   TaskModel(title: 'Gym', timeOrDate: '17:30', status: 'Now',reminderTime: null),
@@ -33,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: sidebar(
+        allTasks: allTasks,
         selectedMenu: selectedMenu,
   onMenuTap: (menu) {
     setState(() {
@@ -176,18 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                   // 🔔 Tombol tes notifikasi
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      notifServices.NotificationService.showSimpleNotification(
-                        title: 'Reminder Aktif!',
-                        body: 'Ini notifikasi tes dari aplikasi kamu 🎉',
-                      );
-                    },
-                    child: Text('Tes Notifikasi 🔔'),
-                  ),
-
                   // Daftar task
                   SizedBox(height: 16),
                   // Placeholder konten
