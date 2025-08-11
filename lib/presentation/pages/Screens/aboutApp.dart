@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
+import 'package:flutter_application_1/utils/translator.dart';
 
 class AboutScreen extends StatelessWidget {
   @override
@@ -17,7 +18,7 @@ class AboutScreen extends StatelessWidget {
           },
         ),
         title: Text(
-          "About App",
+          translate("About App","Tentang Aplikasi"),
           style: TextStyle(
               color: AppColors.textPrimary,
               fontFamily: 'Inter',
@@ -33,7 +34,7 @@ class AboutScreen extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Task Planner App',
+                translate('Task Planner App','Aplikasi Perencana Tugas'),
                 style: TextStyle(
                     color: AppColors.textPrimary,
                     fontFamily: 'Inter',
@@ -43,7 +44,7 @@ class AboutScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'DONECAT is a To-Do List Application Designed to Help you Organize and Manage Your Daily Tasks More Effectively. With Simple and Easy-to-use Features, You Can Create Task Lists and Well Remind you According to the Schedule Youve set',
+              translate('DONECAT is a To-Do List Application Designed to Help you Organize and Manage Your Daily Tasks More Effectively. With Simple and Easy-to-use Features, You Can Create Task Lists and Well Remind you According to the Schedule Youve set','DONECAT adalah Aplikasi Daftar Tugas yang Dirancang untuk Membantu Anda Mengatur dan Mengelola Tugas Harian Anda dengan Lebih Efektif. Dengan Fitur yang Sederhana dan Mudah Digunakan, Anda Dapat Membuat Daftar Tugas dan Mengingatkan Anda Sesuai Jadwal yang Telah Anda Tetapkan'),
               style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 16,
@@ -52,7 +53,7 @@ class AboutScreen extends StatelessWidget {
             ),
             SizedBox(height: 24),
             Text(
-              'Dibuat oleh:',
+              translate('Created by:','Dibuat oleh:'),
               style: TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -68,7 +69,7 @@ class AboutScreen extends StatelessWidget {
                   fontWeight: FontWeight.w500),
             ),
             Text(
-              'UI/UX & Flutter Developer',
+               translate('Mobile Developer','Pengembang Aplikasi Seluler'),
               style: TextStyle(
                   color: AppColors.textPrimary,
                   fontFamily: 'Inter',
@@ -77,7 +78,7 @@ class AboutScreen extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Kontak:',
+               translate('Kontak:','Kontak:'),
               style: TextStyle(
                   color: AppColors.textPrimary,
                   fontWeight: FontWeight.bold,
@@ -124,7 +125,7 @@ class AboutScreen extends StatelessWidget {
                     fontSize: 16,
                     fontWeight: FontWeight.w500)),
             Text(
-              'Update: Agustus 2025',
+               translate('Update: Agustus 2025','Update: Agustus 2025'),
               style: TextStyle(
                   color: AppColors.textPrimary,
                   fontFamily: 'Inter',

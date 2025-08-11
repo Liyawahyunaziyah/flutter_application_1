@@ -11,4 +11,9 @@ class AppColors {
   static const Color SecondIcon = Color(0xFF9F9FED);
   static const Color SecondText = Color(0xFFD5D5D5);
   static const Color title = Color(0xFF9F9FED);
+  static const Color insidebox= Color(0x1AFFFFFF);
+  static const Color darkBackground = Color(0xFF0F0A1F);
+  static const Color darkCard = Color(0xFF1C1533);
+  static const Color darkColomn1 = Color(0xFFA277FF);
+  static const Color darkColomn2 = Color(0xFF6C4DFF);
 }

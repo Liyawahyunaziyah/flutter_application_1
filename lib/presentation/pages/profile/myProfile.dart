@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
+import 'package:flutter_application_1/utils/translator.dart';
 
 void main() => runApp(MyProfileApp());
 
@@ -26,7 +27,7 @@ class MyProfilePage extends StatelessWidget {
     },
          ), // Warna ikon
         title: Text(
-          'My Profile',
+          translate('My Profile','Profil Saya'),
           style: TextStyle(
               color: AppColors.textPrimary,
               fontFamily: 'Inter',
@@ -48,13 +49,13 @@ class MyProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 48),
-                CustomTextField(label: "Username", labelColor: AppColors.title),
+                CustomTextField(label:translate( "Username","Pengguna"), labelColor: AppColors.title),
                 SizedBox(height: 32),
-                CustomTextField(label: "Full Name", labelColor: AppColors.title),
+                CustomTextField(label:translate( "Full Name","Nama Lengkap"), labelColor: AppColors.title),
                 SizedBox(height: 32),
-                CustomTextField(label: "Email", labelColor: AppColors.title),
+                CustomTextField(label:translate( "Email","Email"), labelColor: AppColors.title),
                 SizedBox(height: 32),
-                CustomTextField(label: "Reset Password", labelColor: AppColors.title),
+                CustomTextField(label:translate( "Reset Password","Atur Ulang Password"), labelColor: AppColors.title),
               ],
             ),
           ),
