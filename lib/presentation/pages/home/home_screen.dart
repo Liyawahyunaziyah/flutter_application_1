@@ -14,8 +14,9 @@ import 'package:flutter_application_1/presentation/pages/Screens/providerTheme.d
 class HomeScreen extends StatefulWidget {
   final String userName;
   final String userEmail;
-  
-  const HomeScreen({super.key, required this.userName, required this.userEmail});
+
+  const HomeScreen(
+      {super.key, required this.userName, required this.userEmail});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -153,6 +154,113 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.bold),
                 ),
               ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Column(
+                children: [
+                  // Tab bar
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => setState(() => activeTab = 'all'),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: activeTab == 'all'
+                                      ? Color(0xFF7b7fcf)
+                                      : Colors.grey.shade300,
+                                  width: 3,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'All Task',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: activeTab == 'all'
+                                      ? Color(0xFF7b7fcf)
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () => setState(() => activeTab = 'done'),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: activeTab == 'done'
+                                      ? Color(0xFF7b7fcf)
+                                      : Colors.grey.shade300,
+                                  width: 3,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Done',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: activeTab == 'done'
+                                      ? Color(0xFF7b7fcf)
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Daftar task
+                  SizedBox(height: 16),
+                  // Placeholder konten
+                  Expanded(
+                    child: ListView(
+                      children: (activeTab == 'all'
+                              ? allTasks.asMap().entries.where(
+                                  (entry) => entry.value.status != 'Done')
+                              : allTasks.asMap().entries.where(
+                                  (entry) => entry.value.status == 'Done'))
+                          .map((entry) {
+                        int realIndex = entry.key;
+                        TaskModel task = entry.value;
+
+                        return TaskCard(
+                          task: task,
+                          isDoneTab: activeTab == 'done',
+                          onDelete: () {
+                            setState(() {
+                              allTasks.removeAt(realIndex);
+                            });
+                          },
+                          onEdit: (updatedTask) {
+                            setState(() {
+                              allTasks[realIndex] = updatedTask;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           // ... (bagian bawah tetap sama)

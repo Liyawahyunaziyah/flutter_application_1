@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/presentation/theme/color_pallete.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'presentation/pages/Screens/providerTheme.dart';
+import 'presentation/pages/screens/providerTheme.dart';
 import 'presentation/pages/home/home_screen.dart';
-import 'auth_screen.dart';
+import 'package:flutter_application_1/presentation/pages/Screens/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,7 +64,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF8E89C3),
+      backgroundColor: AppColors.Background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -73,24 +74,34 @@ class SplashScreen extends StatelessWidget {
             const Text(
               "CATDONE",
               style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'Inter'),
             ),
             const SizedBox(height: 40),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF8E89C3),
+                backgroundColor: AppColors.card,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
               ),
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  MaterialPageRoute(builder: (_) => LoginScreen()),
                 );
               },
-              child: const Text("Login"),
+              child: const Text(
+                "Login",
+                style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontFamily: 'Inter',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
